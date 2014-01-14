@@ -13,6 +13,7 @@ namespace ZS.Engine {
 		private static ILogger _logger = LoggerFactory.GetLogger(typeof(Singleton<T>));
 
 		public static T Instance { 
+
 			get { 
 				if(_applicationIsQuitting) {
 					_logger.Warning("<Instance> - Application already destroyed");
@@ -50,6 +51,11 @@ namespace ZS.Engine {
 								" is needed in the scene, so '" + singleton +
 								"' was created with DontDestroyOnLoad.");
 						} else {
+							if(_instance is IInitializable) {
+								((IInitializable)_instance).Initialize();
+								_logger.Info("<Instance> - instance initialized.");
+							}
+
 							_logger.Info("<Instance> Using instance already created: " +
 								_instance.gameObject.name);
 						}

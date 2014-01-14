@@ -9,6 +9,14 @@ namespace ZS.Engine.Peripherials {
 			return Input.GetAxis("Mouse ScrollWheel");
 		}
 
+		public float MoveDX {
+			get { return Input.GetAxis("Horizontal"); }
+		}
+
+		public float MoveDY {
+			get { return Input.GetAxis("Vertical"); }
+		}
+
 		public float MouseDX {
 			get { return Input.GetAxis("Mouse X"); }
 		}

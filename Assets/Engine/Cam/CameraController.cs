@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ZS.Engine.Math;
+using ZS.Engine;
 
 namespace ZS.Engine.Cam { 
 
@@ -15,8 +16,7 @@ namespace ZS.Engine.Cam {
 
     	// Use this for initialization
     	void Start () {
-      //      CameraManager.Instance.Fix(Maths.PointToTransform(new Vector3(6,12,-10)));
-            CameraManager.Instance.Detach();
+            CameraManager.Instance.Follow(Registry.Instance.player.transform);
     	}
     	
     	public IEnumerator Shake() {

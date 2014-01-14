@@ -19,6 +19,7 @@ namespace ZS.Engine.Cam {
 		#region Members.
 
 		private float _trackingSpeed;
+		private Camera _mainCamera;
 		private Transform _cameraTransform;
 		private Transform _target;
 		private Dictionary<CameraMode, Action> _methods;
@@ -37,6 +38,7 @@ namespace ZS.Engine.Cam {
 		#endregion
 
 		public void Initialize() {
+			_mainCamera = Registry.Instance.mainCamera;
 			_cameraDrag = Registry.Instance.cameraDrag;
 			_cameraTransform = Registry.Instance.mainCameraTransform;
 			_trackingSpeed = Registry.Instance.cameraTrackingSpeed;
@@ -91,30 +93,6 @@ namespace ZS.Engine.Cam {
   				_cameraTransform.position = Vector3.MoveTowards(origin, destination, 
   					Time.deltaTime * Registry.Instance.cameraScrollSpeed);
 			}
-
-		//	_cameraTransform.position = movement;
-
-			// if(InputService.Instance.HasMouseMovedX) {
-			// 	Debug.Log("MOVE");
-			// 	if((InputService.Instance.MousePosition.x + InputService.Instance.MouseDX) > Screen.width) {
-			// 		_scrollX = InputService.Instance.MouseDX;
-			// 		Debug.Log("ON");
-			// 	}
-			// 	else {
-			// 		_scrollX = 0;
-			// 		Debug.Log("OFF");
-			// 	}
-			// }			
-			// if(InputService.Instance.HasMouseMovedY) {
-			// 	if((InputService.Instance.MousePosition.y + InputService.Instance.MouseDY) > Screen.width)
-			// 		_scrollY = InputService.Instance.MouseDY;
-			// 	else 
-			// 		_scrollY = 0;
-			// }
-
-			// if(_scrollY != 0 || _scrollX != 0)
-			// 	_cameraTransform.position += new Vector3(_scrollX * _cameraDrag * Time.deltaTime, 	
-   //                             _scrollY * _cameraDrag * Time.deltaTime, 0);
 		}
 
 		private void ParseZoom() {
@@ -154,7 +132,21 @@ namespace ZS.Engine.Cam {
 			ParseZoom();
  			_dTime = Time.deltaTime * _trackingSpeed;
 			_methods[_currentMode]();
-		} 	
+		}
+
+		#region Utilities.
+
+		// Find hit object.
+		public GameObject FindHitObject(Vector3 hitPoint) {
+ 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+ 			Vector2 orgin = new Vector2(ray.origin.x,ray.origin.y);
+ 			RaycastHit2D hit = Physics2D.Raycast(orgin, Vector2.zero);
+ 			if(hit.collider != null)
+ 				return hit.collider.gameObject;
+			return null;
+		}
+
+		#endregion
 	}
 
 }
