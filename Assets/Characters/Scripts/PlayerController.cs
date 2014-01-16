@@ -3,6 +3,7 @@ using System.Collections;
 using ZS.Engine.Cam;
 using ZS.Engine.Peripherials;
 using ZS.Engine;
+using ZS.Characters;
 
 namespace Characters {
 
@@ -15,7 +16,6 @@ namespace Characters {
 		private float _moveX, _moveY;
 		protected Vector3 _inputRotation;
 		protected Vector3 _tempVector;
-		protected Vector3 _tempVector2;
 		private Quaternion _rotation;
 		private bool _isShooting;
 		private Vector3 mouse_pos  ;
@@ -48,6 +48,9 @@ namespace Characters {
 		}
 
 		private void InputActivity() {
+			if(GameService.Instance.IsTactical)
+				return;
+
 			if(Input.GetKeyUp(KeyCode.T)) {
 				GameService.Instance.ToggleOpsMode();
 			}
@@ -84,29 +87,57 @@ namespace Characters {
 	    	}
 		}
 
+		static int it = 0;
+
+		// Left button was pressed in tactical mode.
 		private void TacticalLeftButtonDown() {
 			 if(Registry.Instance.hudManager.PointInClientBounds(InputService.Instance.MousePosition)) {
-			        GameObject hitObject = CameraManager.Instance.FindHitObject(InputService.Instance.MousePosition);
-			        Debug.Log(hitObject != null);
-			        // Vector3 hitPoint = FindHitPoint();
-			        // if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
-			        //     if(player.SelectedObject) player.SelectedObject.MouseClick(hitObject, hitPoint, player);
-			        //     else if(hitObject.name!="Ground") {
-			        //         WorldObject worldObject = hitObject.transform.root.GetComponent< WorldObject >();
-			        //         if(worldObject) {
-			        //             //we already know the player has no selected object
-			        //             player.SelectedObject = worldObject;
-			        //             worldObject.SetSelection(true);
-			        //         }
-			        //     }
-			        // }
+			        GameObject hitObject = CameraManager.Instance.FindHitObject(InputService.Instance.MousePosition, out _tempVector);			        
+			        // If nothing was hit or an illegal point was hit, do nothing.
+			        if(_tempVector == Registry.Instance.invalidHitPoint) { // we dont care. 
+						if(GameService.Instance.selectedObject != null) {
+							GameService.Instance.selectedObject.SetSelection(SelectionType.NotSelected);
+							GameService.Instance.selectedObject = null;
+						}
+			        	return;
+			        }
+
+			        var hitEntity = hitObject.transform.root.GetComponent< Entity >();
+			        // Object hit was interactive.
+			        if(hitEntity != null) { 
+				        // If this entity is not already selected.
+				        if(GameService.Instance.selectedObject != hitEntity) {
+							hitEntity.SetSelection(SelectionType.Command);
+							if (GameService.Instance.selectedObject != null) { // Deselect if selected.
+								GameService.Instance.selectedObject.SetSelection(SelectionType.NotSelected);
+			       			} 
+				            GameService.Instance.selectedObject = hitEntity;
+			        	}
+			        }
+			        else if (GameService.Instance.selectedObject != null) { // Deselect if selected.
+						GameService.Instance.selectedObject.SetSelection(SelectionType.NotSelected);
+						GameService.Instance.selectedObject = null;
+			        }
 			    }
 		}
 
-
-
+		// Right button was clicked in selection mode.
 		private void TacticalRightButtonDown() {
+			// For now, right click doesnt do anything if nothing is selected.
+			if(GameService.Instance.selectedObject == null) {
+				TacticalLeftButtonDown(); // treat it like a lbutton.
+			}
+			if(Registry.Instance.hudManager.PointInClientBounds(InputService.Instance.MousePosition)) {
+			    GameObject hitObject = CameraManager.Instance.FindHitObject(InputService.Instance.MousePosition, out _tempVector);
+				var hitEntity = hitObject == null ? null : hitObject.transform.root.GetComponent< Entity >();
+			    if(hitEntity == null)
+			       	return;
 
+			    // Action mouse clicked.
+			    hitEntity.ActionInitiated(GameService.Instance.selectedObject.gameObject,
+			    GameService.Instance.selectedObject,
+			    _tempVector);
+			}
 		}
 	}
 }

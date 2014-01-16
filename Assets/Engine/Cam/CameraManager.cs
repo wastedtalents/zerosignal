@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using ZS.Engine.Peripherials;
+using ZS.Engine.Utilities;
 
 namespace ZS.Engine.Cam { 
 
@@ -27,6 +28,7 @@ namespace ZS.Engine.Cam {
 		private float _temp , _temp2;
 		private float _dTime;
 		private Vector3 _tempVector, _tempVector2;
+		private Vector2 _tempVector2d;
 		private float _scrollX, _scrollY;
 
 		#endregion
@@ -136,13 +138,22 @@ namespace ZS.Engine.Cam {
 
 		#region Utilities.
 
-		// Find hit object.
-		public GameObject FindHitObject(Vector3 hitPoint) {
- 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
- 			Vector2 orgin = new Vector2(ray.origin.x,ray.origin.y);
- 			RaycastHit2D hit = Physics2D.Raycast(orgin, Vector2.zero);
- 			if(hit.collider != null)
- 				return hit.collider.gameObject;
+		// Get hit object.
+		// NOTE since this scans only the Z = 0 plane, all the colliders have to be there.
+		public GameObject FindHitObject(Vector3 hitPoint, out Vector3 actualHit) {
+			// NOTE: this will work only on Z = 0;
+			_tempVector = InputService.Instance.MousePosition;
+			_tempVector.z = -_cameraTransform.position.z;
+			_tempVector = Camera.main.ScreenToWorldPoint(_tempVector);
+       		_tempVector2d = new Vector2(_tempVector.x, _tempVector.y);
+
+       		// Get collider.
+       		Collider2D coll = Physics2D.OverlapPoint(_tempVector2d);
+			if(coll != null) {
+ 				actualHit = _tempVector2d;
+ 				return coll.gameObject;
+ 			}
+ 			actualHit = Registry.Instance.invalidHitPoint;
 			return null;
 		}
 

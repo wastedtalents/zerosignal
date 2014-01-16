@@ -7,6 +7,8 @@ namespace ZS.Engine {
 	// Object registry.
 	public class Registry : Singleton<Registry>, IInitializable {
 
+		public const string GROUND_NAME = "Background";
+
 		public Transform mainCameraTransform;
 		public float cameraTrackingSpeed;
 		public float cameraDrag = 40f;
@@ -32,12 +34,15 @@ namespace ZS.Engine {
 		[HideInInspector]
 		public HUDManager hudManager;
 
+		[HideInInspector]
+		public Vector3 invalidHitPoint;
 
 		public void Initialize() {
 			mainCamera = Camera.main;
 			player = GameObject.FindGameObjectsWithTag("Player")[0];
 			hud = GameObject.FindGameObjectsWithTag("HUD")[0];
 			hudManager = hud.GetComponent<HUDManager>();
+			invalidHitPoint = Vector3.forward;
 		}
 	}
 
