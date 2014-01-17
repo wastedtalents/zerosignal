@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ZS.Engine;
+using ZS.Engine.GUI;
+using ZS.Engine.Factories;
+using ZS.Engine.Utilities;
 
 namespace ZS.Characters {
 
@@ -18,6 +21,7 @@ namespace ZS.Characters {
 		
 		protected string[] _actions = {};
 		protected SelectionType _currentSelection;
+		protected GameObject _selection;
 
 		public Entity(string name) { 
 			displayName = name;
@@ -28,8 +32,21 @@ namespace ZS.Characters {
 
 		// Set this object as selected.
 		public void SetSelection(SelectionType selection) {
- 		   _currentSelection = selection;
+		   _currentSelection = selection;
+		   if(_currentSelection != SelectionType.NotSelected)
+ 		   	 ShowSelection();
+ 		   else if(_selection != null)
+ 		   	 HideSelection();
 		}
+
+		protected void ShowSelection() {
+			_selection = SelectorFactory.Instance.Get(gameObject.transform, _currentSelection);
+		} 
+
+		protected void HideSelection() {
+			SelectorFactory.Instance.Return(_selection);
+			_selection = null;
+		} 
 
 		// Gets available actions.
 		public string[] GetActions() {

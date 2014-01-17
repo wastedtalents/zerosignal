@@ -8,13 +8,12 @@ namespace ZS.HUD {
 
 		#region GUISkins.
 
-		public GUISkin resourceSkin, ordersSkin;
+		public GUISkin resourceSkin, ordersSkin, selectBoxSkin;
 		public bool _insideWidth, _insideHeight;
 
 		public int gui_ordersBarWidth = 150;
 		public int gui_resourcesBarHeight = 40;
 		public int gui_selectionNameHeight = 30;
-
 
 		#endregion
 
@@ -63,6 +62,12 @@ namespace ZS.HUD {
    			 _insideWidth = point.x >= 0 && point.x <= Screen.width - gui_ordersBarWidth;      
    			 _insideHeight = point.y >= 0 && point.y <= Screen.height - 	gui_resourcesBarHeight;
   			 return _insideWidth && _insideHeight;
+		}
+
+		// Gets the actual PLAYING area.
+		public Rect GetPlayingArea() {
+    		return new Rect(0, gui_resourcesBarHeight, Screen.width - gui_ordersBarWidth, 
+    			Screen.height - gui_resourcesBarHeight);
 		}
 	}
 

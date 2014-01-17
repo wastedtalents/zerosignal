@@ -2,6 +2,7 @@
 using System.Collections;
 using ZS.Engine.Cam;
 using ZS.Characters;
+using ZS.Engine.GUI;
 
 namespace ZS.Engine {
 
@@ -24,8 +25,10 @@ namespace ZS.Engine {
 			if(_isTactical == isTactical)
 				return;
 			_isTactical = isTactical;
-			if(_isTactical)  
+			if(_isTactical)  {
 				CameraManager.Instance.Detach();
+				GUIService.Instance.HideSelectors();
+			}
 			else  {
 				CameraManager.Instance.Follow(Registry.Instance.player.transform);
 			}

@@ -38,12 +38,16 @@ namespace ZS.Engine {
 		[HideInInspector]
 		public Vector3 invalidHitPoint;
 
+		[HideInInspector]
+		public Bounds invalidBounds;
+
 		public void Initialize() {
 			mainCamera = Camera.main;
 			player = GameObject.FindGameObjectsWithTag("Player")[0];
 			hud = GameObject.FindGameObjectsWithTag("HUD")[0];
 			hudManager = hud.GetComponent<HUDManager>();
 			invalidHitPoint = Vector3.forward;
+			invalidBounds = new Bounds(new Vector3(-99999, -99999, -99999), new Vector3(0, 0, 0));
 		}
 	}
 

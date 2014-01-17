@@ -9,9 +9,13 @@ namespace Characters {
 
 	public class PlayerController : MonoBehaviour {
 
+		// Prefab for bullets.
 		public GameObject bullet;
-		private Animator animator;
-		private Rigidbody2D rigidBody2D;
+
+		private GameObject _head;
+		private Animator _animator;
+		private Rigidbody2D _rigidBody2D;
+
 		public float flSpeed = 0.0f;
 		private float _moveX, _moveY;
 		protected Vector3 _inputRotation;
@@ -22,8 +26,9 @@ namespace Characters {
 
 		// Use this for initialization
 		void Start () {
-			animator = GetComponent<Animator>();
-			rigidBody2D = GetComponent<Rigidbody2D>();
+			_head = transform.Find("Head").gameObject;
+			_animator = GetComponent<Animator>();
+			_rigidBody2D = GetComponent<Rigidbody2D>();
 		}
 		
 		void Update () {
@@ -38,13 +43,12 @@ namespace Characters {
 		}
 
 		private void MovePlayer() {
-			rigidBody2D.velocity = new Vector2(_moveX * flSpeed, _moveY * flSpeed);
+			_rigidBody2D.velocity = new Vector2(_moveX * flSpeed, _moveY * flSpeed);
 			_rotation = LookHelper.SmoothLookAtMouse(transform, 0.05f, -90);
-			// var obj = GameObject.FindGameObjectsWithTag ("XCube")[0];
-			// _rotation = LookHelper.SmoothLookAt(transform, obj.transform, 0.01f, -90);
+		//	_head.transform.rotation = _rotation;
 
-			animator.SetBool("isRunning", _moveX != 0 || _moveY != 0);
-			animator.SetFloat("speed" , Mathf.Abs(Mathf.Max(_moveX, _moveY)));
+			_animator.SetBool("isRunning", _moveX != 0 || _moveY != 0);
+			_animator.SetFloat("speed" , Mathf.Abs(Mathf.Max(_moveX, _moveY)));
 		}
 
 		private void InputActivity() {
@@ -87,8 +91,6 @@ namespace Characters {
 	    	}
 		}
 
-		static int it = 0;
-
 		// Left button was pressed in tactical mode.
 		private void TacticalLeftButtonDown() {
 			 if(Registry.Instance.hudManager.PointInClientBounds(InputService.Instance.MousePosition)) {
@@ -107,10 +109,10 @@ namespace Characters {
 			        if(hitEntity != null) { 
 				        // If this entity is not already selected.
 				        if(GameService.Instance.selectedObject != hitEntity) {
-							hitEntity.SetSelection(SelectionType.Command);
-							if (GameService.Instance.selectedObject != null) { // Deselect if selected.
+				        	if (GameService.Instance.selectedObject != null) { // Deselect if selected.
 								GameService.Instance.selectedObject.SetSelection(SelectionType.NotSelected);
 			       			} 
+							hitEntity.SetSelection(SelectionType.Command);
 				            GameService.Instance.selectedObject = hitEntity;
 			        	}
 			        }
