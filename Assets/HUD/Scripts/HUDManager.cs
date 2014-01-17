@@ -11,6 +11,11 @@ namespace ZS.HUD {
 		public GUISkin resourceSkin, ordersSkin;
 		public bool _insideWidth, _insideHeight;
 
+		public int gui_ordersBarWidth = 150;
+		public int gui_resourcesBarHeight = 40;
+		public int gui_selectionNameHeight = 30;
+
+
 		#endregion
 
 		// Use this for initialization
@@ -23,29 +28,30 @@ namespace ZS.HUD {
 			DrawOrders();
 		}
 
+		// Draws the resources bar.
 		private void DrawResources() {
 			GUI.skin = resourceSkin;
-   			 GUI.BeginGroup(new Rect(0,0,Screen.width , Registry.Instance.gui_resourcesBarHeight));
-  	 		 GUI.Box(new Rect(0,0,Screen.width,Registry.Instance.gui_resourcesBarHeight),"");
+   			 GUI.BeginGroup(new Rect(0,0,Screen.width , gui_resourcesBarHeight));
+  	 		 GUI.Box(new Rect(0,0,Screen.width,gui_resourcesBarHeight),"");
    			 GUI.EndGroup();
 		}
 
+		// Draws the orders bar.
 		private void DrawOrders() {
-
 			GUI.skin = ordersSkin;
-	  		GUI.BeginGroup(new Rect(Screen.width - Registry.Instance.gui_ordersBarWidth , 
-	  			Registry.Instance.gui_resourcesBarHeight, Registry.Instance.gui_ordersBarWidth,
-	  			Screen.height - Registry.Instance.gui_resourcesBarHeight));
-	  		GUI.Box(new Rect(0,0, Registry.Instance.gui_ordersBarWidth , Screen.height - Registry.Instance.gui_resourcesBarHeight),"");
+	  		GUI.BeginGroup(new Rect(Screen.width - gui_ordersBarWidth , 
+	  			gui_resourcesBarHeight, gui_ordersBarWidth,
+	  			Screen.height - gui_resourcesBarHeight));
+	  		GUI.Box(new Rect(0,0, gui_ordersBarWidth , Screen.height - gui_resourcesBarHeight),"");
 
 			// Draw selected player.
-			string selectionName = "";
+			var selectionName = "";
 			if(GameService.Instance.selectedObject != null) {
-    			selectionName = GameService.Instance.selectedObject.objectName;
+    			selectionName = GameService.Instance.selectedObject.displayName;
 			}
 			if(!selectionName.Equals("")) {
-    			GUI.Label(new Rect(0,10, Registry.Instance.gui_ordersBarWidth, 
-    				Registry.Instance.gui_selectionNameHeight), selectionName);
+    			GUI.Label(new Rect(4,10, gui_ordersBarWidth, 
+    				gui_selectionNameHeight), selectionName);
 			}	   		
 
 	   		GUI.EndGroup();
@@ -54,8 +60,8 @@ namespace ZS.HUD {
 		public bool PointInClientBounds(Vector3 point) {
 			 //Screen coordinates start in the lower-left corner of the screen
    			 //not the top-right of the screen like the drawing coordinates do
-   			 _insideWidth = point.x >= 0 && point.x <= Screen.width - Registry.Instance.gui_ordersBarWidth;      
-   			 _insideHeight = point.y >= 0 && point.y <= Screen.height - Registry.Instance.gui_resourcesBarHeight;
+   			 _insideWidth = point.x >= 0 && point.x <= Screen.width - gui_ordersBarWidth;      
+   			 _insideHeight = point.y >= 0 && point.y <= Screen.height - 	gui_resourcesBarHeight;
   			 return _insideWidth && _insideHeight;
 		}
 	}

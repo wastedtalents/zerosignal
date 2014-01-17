@@ -22,10 +22,6 @@ namespace ZS.Engine {
 		public float cameraZoomMax = -2;
 		public float cameraScrollOffset = 15f;
 		public float cameraScrollSpeed = 25f;
-	
-		public int gui_ordersBarWidth = 150;
-		public int gui_resourcesBarHeight = 40;
-		public int gui_selectionNameHeight = 15;
 
 		[HideInInspector]
 		public Camera mainCamera;
