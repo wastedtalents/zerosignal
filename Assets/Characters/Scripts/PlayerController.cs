@@ -48,10 +48,10 @@ namespace Characters {
 		}
 
 		private void InputActivity() {
-			if(GameService.Instance.IsTactical)
+			if(GameService.Instance.IsTactical && !InputService.Instance.IsOpsModeKey)
 				return;
 
-			if(Input.GetKeyUp(KeyCode.T)) {
+			if(InputService.Instance.IsOpsModeKey) {
 				GameService.Instance.ToggleOpsMode();
 			}
 			else {
@@ -127,16 +127,17 @@ namespace Characters {
 			if(GameService.Instance.selectedObject == null) {
 				TacticalLeftButtonDown(); // treat it like a lbutton.
 			}
-			if(Registry.Instance.hudManager.PointInClientBounds(InputService.Instance.MousePosition)) {
+			else if(Registry.Instance.hudManager.PointInClientBounds(InputService.Instance.MousePosition)) {
 			    GameObject hitObject = CameraManager.Instance.FindHitObject(InputService.Instance.MousePosition, out _tempVector);
 				var hitEntity = hitObject == null ? null : hitObject.transform.root.GetComponent< Entity >();
 			    if(hitEntity == null)
 			       	return;
 
 			    // Action mouse clicked.
-			    hitEntity.ActionInitiated(GameService.Instance.selectedObject.gameObject,
-			    GameService.Instance.selectedObject,
-			    _tempVector);
+			    GameService.Instance.selectedObject.ActionInitiated(
+			    	hitObject,
+			    	hitEntity,
+			    	_tempVector);
 			}
 		}
 	}

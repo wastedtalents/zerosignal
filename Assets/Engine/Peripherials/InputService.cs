@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using  ZS.Engine;
 
 namespace ZS.Engine.Peripherials {
 
@@ -36,6 +37,10 @@ namespace ZS.Engine.Peripherials {
 		public bool HasMouseMovedY {
 			get { return MouseDY != 0; }
 		}		
+
+		public bool IsOpsModeKey { 
+			get { return Input.GetKeyUp(Registry.Instance.TOGGLE_OPS_KEY); }
+		}
 	}
 
 }

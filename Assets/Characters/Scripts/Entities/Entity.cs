@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ZS.Engine;
 
 namespace ZS.Characters {
 
@@ -18,15 +19,16 @@ namespace ZS.Characters {
 		protected string[] _actions = {};
 		protected SelectionType _currentSelection;
 
+		public Entity(string name) { 
+			displayName = name;
+		}
+
+		public Entity() {
+		}
+
 		// Set this object as selected.
 		public void SetSelection(SelectionType selection) {
  		   _currentSelection = selection;
-
- 		   if(_currentSelection == SelectionType.Command)
- 		   	Debug.Log("SELECTED");
- 		   else if(_currentSelection == SelectionType.NotSelected)
- 		   	Debug.Log("DESELECTED");
-
 		}
 
 		// Gets available actions.
@@ -35,19 +37,24 @@ namespace ZS.Characters {
 		}
 
 		// Peform a given action.
-		public virtual void PerformAction(string actionToPerform) {
+		public virtual void PerformAction(GameObject targetObject, Entity targetEntity, string actionToPerform) {
+			if(actionToPerform == Registry.ACTION_ATTACK) {
+				Debug.Log(targetEntity.displayName + " : " + actionToPerform);
+			}
 		}
 
 		// Mouse clicked at point.
 		public virtual void ActionInitiated(GameObject hitObject, Entity entity, Vector3 hitPoint) {
-			Debug.Log("ACTION CLICKED");
-			 // if(_currentSelection == SelectionType.Command && hitObject != null 
-			 // 	&& hitObject.name != Registry.GROUND_NAME) {
-			 // 	var entity = hitObject.transform.root.GetComponent< Entity >();
-	   //      	// This logic might be moved up BUT 
-	   //      	if(entity != null) 
-	   //      		ChangeSelection(worldObject, controller);
-			 // }
+			 // If were currently SELECTED as command mode, we can do stuff!
+			 if(_currentSelection == SelectionType.Command && hitObject != null 
+			 	&& hitObject.name != Registry.GROUND_NAME) {
+	        	// This logic might be moved up BUT 
+	        	if(entity != null) { 
+	        		// GetActions
+	        		// Perform action
+	        		entity.PerformAction(hitObject, entity, Registry.ACTION_ATTACK);
+	        	}
+			 }
 		}
 	}
 

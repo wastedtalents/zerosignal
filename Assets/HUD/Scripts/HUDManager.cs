@@ -37,6 +37,17 @@ namespace ZS.HUD {
 	  			Registry.Instance.gui_resourcesBarHeight, Registry.Instance.gui_ordersBarWidth,
 	  			Screen.height - Registry.Instance.gui_resourcesBarHeight));
 	  		GUI.Box(new Rect(0,0, Registry.Instance.gui_ordersBarWidth , Screen.height - Registry.Instance.gui_resourcesBarHeight),"");
+
+			// Draw selected player.
+			string selectionName = "";
+			if(GameService.Instance.selectedObject != null) {
+    			selectionName = GameService.Instance.selectedObject.objectName;
+			}
+			if(!selectionName.Equals("")) {
+    			GUI.Label(new Rect(0,10, Registry.Instance.gui_ordersBarWidth, 
+    				Registry.Instance.gui_selectionNameHeight), selectionName);
+			}	   		
+
 	   		GUI.EndGroup();
 		}
 

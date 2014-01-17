@@ -24,10 +24,11 @@ namespace ZS.Engine {
 			if(_isTactical == isTactical)
 				return;
 			_isTactical = isTactical;
-			if(_isTactical) 
+			if(_isTactical)  
 				CameraManager.Instance.Detach();
-			else 
+			else  {
 				CameraManager.Instance.Follow(Registry.Instance.player.transform);
+			}
 		}
 
 		public void ToggleOpsMode() {

@@ -8,6 +8,10 @@ namespace ZS.Engine {
 	public class Registry : Singleton<Registry>, IInitializable {
 
 		public const string GROUND_NAME = "Background";
+		public readonly KeyCode TOGGLE_OPS_KEY = KeyCode.T;
+
+		// ACTIONS.
+		public const string ACTION_ATTACK = "A_Attack";
 
 		public Transform mainCameraTransform;
 		public float cameraTrackingSpeed;
@@ -21,6 +25,7 @@ namespace ZS.Engine {
 	
 		public int gui_ordersBarWidth = 150;
 		public int gui_resourcesBarHeight = 40;
+		public int gui_selectionNameHeight = 15;
 
 		[HideInInspector]
 		public Camera mainCamera;
