@@ -4,6 +4,7 @@ using ZS.Engine.Cam;
 using ZS.Engine.Peripherials;
 using ZS.Engine;
 using ZS.Characters;
+using ZS.Engine.Utilities;
 
 namespace Characters {
 
@@ -42,10 +43,19 @@ namespace Characters {
 			MouseActivity();
 		}
 
+		// Move player and change opacity of layers above.
 		private void MovePlayer() {
 			_rigidBody2D.velocity = new Vector2(_moveX * flSpeed, _moveY * flSpeed);
 			_rotation = LookHelper.SmoothLookAtMouse(transform, 0.05f, -90);
 		//	_head.transform.rotation = _rotation;
+
+			_tempVector.x = transform.position.x;
+			_tempVector.y = transform.position.y;
+			_tempVector.z = Registry.Instance.CEILING_LAYER_Z;
+			Collider2D coll = Physics2D.OverlapPoint(_tempVector, Registry.Instance.CEILING_LAYER_MASK_ID);			
+			Debug.Log("a |o> "  + coll);
+		//	Debug.Log(DebugUtil.V2s(_tempVector));
+
 
 			_animator.SetBool("isRunning", _moveX != 0 || _moveY != 0);
 			_animator.SetFloat("speed" , Mathf.Abs(Mathf.Max(_moveX, _moveY)));

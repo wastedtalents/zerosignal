@@ -21,15 +21,22 @@ namespace ZS.Engine {
 			get { return _isTactical; }
 		}
 
+		void Start() {
+			SetOpsMode(false);
+		}
+
 		public void SetOpsMode(bool isTactical) {
 			if(_isTactical == isTactical)
 				return;
 			_isTactical = isTactical;
 			if(_isTactical)  {
 				CameraManager.Instance.Detach();
-				GUIService.Instance.HideSelectors();
-			}
+				Registry.Instance.hudManager.SetTacticalMode();
+			} 
 			else  {
+				// Hide selectors.
+				Registry.Instance.hudManager.SetArcadeMode();
+				GUIService.Instance.HideSelectors();
 				CameraManager.Instance.Follow(Registry.Instance.player.transform);
 			}
 		}

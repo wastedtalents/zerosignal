@@ -9,6 +9,8 @@ namespace ZS.Engine {
 
 		public const string GROUND_NAME = "Background";
 		public readonly KeyCode TOGGLE_OPS_KEY = KeyCode.T;
+		public float CEILING_LAYER_Z ;
+		public int CEILING_LAYER_MASK_ID; // used for raycasting mapping as a layermask.
 
 		// ACTIONS.
 		public const string ACTION_ATTACK = "A_Attack";
@@ -48,6 +50,11 @@ namespace ZS.Engine {
 			hudManager = hud.GetComponent<HUDManager>();
 			invalidHitPoint = Vector3.forward;
 			invalidBounds = new Bounds(new Vector3(-99999, -99999, -99999), new Vector3(0, 0, 0));
+
+			CEILING_LAYER_Z = GameObject.FindGameObjectsWithTag("CeilingPlane")[0].transform.position.z;
+			CEILING_LAYER_MASK_ID = 1 << LayerMask.NameToLayer("Ceiling");
+
+			Debug.Log(">" + CEILING_LAYER_MASK_ID);
 		}
 	}
 
