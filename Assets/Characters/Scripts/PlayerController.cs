@@ -52,9 +52,35 @@ namespace Characters {
 			_tempVector.x = transform.position.x;
 			_tempVector.y = transform.position.y;
 			_tempVector.z = Registry.Instance.CEILING_LAYER_Z;
-			Collider2D coll = Physics2D.OverlapPoint(_tempVector, Registry.Instance.CEILING_LAYER_MASK_ID);			
-			Debug.Log("a |o> "  + coll);
-		//	Debug.Log(DebugUtil.V2s(_tempVector));
+			
+
+			// option 1.
+			// Collider2D coll = Physics2D.OverlapPoint(_tempVector, Registry.Instance.CEILING_LAYER_MASK_ID);			
+			// if(coll) {
+			// 	//var c = coll.gameObject.transform[renderer.material.color;
+			// 	var c =  coll.gameObject.GetComponentsInChildren<Transform>()[1].gameObject.renderer.material.color;
+			// 	c.a = 0.5f;
+			// 	coll.gameObject.GetComponentsInChildren<Transform>()[1].gameObject.renderer.material.color = c;
+			// }
+
+			Debug.DrawRay(Camera.main.transform.position, transform.position - Camera.main.transform.position, Color.red);
+
+			// option2.
+			RaycastHit2D[] hits = new RaycastHit2D[10];
+			Vector3 dir = transform.position - Camera.main.transform.position;
+			Vector3 dtransposed = Camera.main.projectionMatrix.MultiplyVector(dir);
+			var hitCount = Physics2D.GetRayIntersectionNonAlloc(new Ray(Camera.main.transform.position, dtransposed.normalized),
+				hits, 10f, Registry.Instance.CEILING_LAYER_MASK_ID);
+			for(int i = 0; i < hitCount; i++) {
+				var coll = hits[i];
+				Debug.Log("COL" + DebugUtil.V2s(coll.point));
+				
+				Debug.DrawLine(Camera.main.transform.position, coll.point, Color.yellow);
+				var c =  coll.collider.gameObject.GetComponentsInChildren<Transform>()[1].gameObject.renderer.material.color;
+				c.a = 0.5f;
+				coll.collider.gameObject.GetComponentsInChildren<Transform>()[1].gameObject.renderer.material.color = c;
+        		//h.collider.renderer.material.color = new Color(h.collider.renderer.material.color.r, h.collider.renderer.material.color.g, h.collider.renderer.material.color.b, 0.5f);
+      		}
 
 
 			_animator.SetBool("isRunning", _moveX != 0 || _moveY != 0);
