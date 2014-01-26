@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ZS.Engine;
+using ZS.HUD;
 using ZS.Engine.GUI;
 using ZS.Engine.Utilities;
 
@@ -13,7 +14,7 @@ namespace ZS.Characters {
 		public string displayName; // display name.
 		public EntityParams parameters;	
 		public Player _owner; // Actual owner of this object if any.
-		
+
 		protected string[] _actions = {};
 		protected SelectionType _currentSelection;
 		protected GameObject _selection;		
@@ -30,8 +31,11 @@ namespace ZS.Characters {
 		}
 
 		// While this object was selected, someone hovered over "go".
-		public void SetHoverState(GameObject go) {
-
+		public virtual void SetHoverState(GameObject go) {
+			// If I have an owner and this is CURRENT user then display.
+			if(_currentSelection != SelectionType.NotSelected && Owner != null && Owner.playerType == PlayerType.Current) {
+				Registry.Instance.hudManager.SetCursorState(CursorState.Select);
+			}
 		}
 
 		// Set this object as selected.

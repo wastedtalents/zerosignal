@@ -33,6 +33,9 @@ namespace ZS.Engine.Cam {
 		private float _scrollX, _scrollY;
 		private bool _mouseScroll;
 
+		private int _tempInt;
+		private Collider2D[] _findColliders;
+
 		#endregion
 
 		#region Declarations.
@@ -47,6 +50,7 @@ namespace ZS.Engine.Cam {
 			_cameraTransform = Registry.Instance.mainCameraTransform;
 			_trackingSpeed = Registry.Instance.cameraTrackingSpeed;
 			_tempVector2 = _cameraTransform.position = _cameraTransform.position;
+			_findColliders = new Collider2D[4]; // Magic max colliders.
 
 			_methods = new  Dictionary<CameraMode, Action>();
 			_methods[CameraMode.Detached] = DoDetached;
@@ -163,12 +167,21 @@ namespace ZS.Engine.Cam {
        		_tempVector2d = new Vector2(_tempVector.x, _tempVector.y);
 
        		// Get collider.
-       		Collider2D coll = Physics2D.OverlapPoint(_tempVector2d);
-			if(coll != null) {
+       	    _tempInt = Physics2D.OverlapPointNonAlloc(_tempVector2d, _findColliders);
+			if(_tempInt > 0) {
+				Debug.Log("HIT " + _findColliders[0].gameObject);
  				actualHit = _tempVector2d;
- 				return coll.gameObject;
+ 				return _findColliders[0].gameObject;
  			}
  			actualHit = Registry.Instance.invalidHitPoint;
+
+
+   //     		Collider2D coll = Physics2D.OverlapPoint(_tempVector2d);
+			// if(coll != null) {
+ 		// 		actualHit = _tempVector2d;
+ 		// 		return coll.gameObject;
+ 		// 	}
+ 		// 	actualHit = Registry.Instance.invalidHitPoint;
 			return null;
 		}
 

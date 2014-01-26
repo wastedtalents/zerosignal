@@ -95,7 +95,6 @@ namespace ZS.Engine {
 			            _hitEntity = _hitObject.transform.root.GetComponent< Entity >();
 			            if(_hitEntity != null && GameService.Instance.IsObjectSelectable(_hitEntity)) {
 			           		Registry.Instance.hudManager.SetCursorState(CursorState.Select);
-							Debug.Log("BAZINGA!");
 			            }
 			        }
 				}				
