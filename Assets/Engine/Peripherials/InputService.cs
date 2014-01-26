@@ -4,6 +4,7 @@ using  ZS.Engine;
 
 namespace ZS.Engine.Peripherials {
 
+	// Usługi odpowiedzialne za przetwarzanie logiki inputów.	
 	public class InputService : Singleton<InputService> {
 
 		public float GetZoom() {

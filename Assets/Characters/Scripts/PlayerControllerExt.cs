@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerControllerExt : MonoBehaviour {
+public class PlayerAvatarControllerExt : MonoBehaviour {
 
 protected Vector3 _inputRotation;
 	protected Vector3 _tempVector;

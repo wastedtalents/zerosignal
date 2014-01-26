@@ -4,11 +4,9 @@ using System.Collections;
 public class BulletScript : MonoBehaviour {
 	private float moveSpeed = 30f; // how fast the bullet moves
 	private float timeSpentAlive; // how long the bullet has stayed alive for
-	private GameObject objPlayer;
 
 	// Use this for initialization
 	void Start () {
-		objPlayer = (GameObject) GameObject.FindWithTag ("Player");
 	}
 
 	// Update is called once per frame

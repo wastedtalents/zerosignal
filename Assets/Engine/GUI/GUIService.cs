@@ -1,16 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using ZS.Engine.Factories;
 
 namespace ZS.Engine.GUI {
 
-	// All stuff related to GUI.
-	public class GUIService : Singleton<GUIService> {
+	// All stuff related to GUI and graphical stuff.
+	// <description>This service is used for all stuff related to GUI! It's like a VisualStateManager. </description>
+	public class GUIService : Singleton<GUIService>, IInitializable {
 
-		public void HideSelectors() {
-			SelectorFactory.Instance.HideSelectors();
+		private SelectionManager _selectionManager;
+
+		public void Initialize() {		
+		   _selectionManager = new SelectionManager(Registry.Instance.hudManager.selectionPrefab);
 		}
+
+		#region Selection management.
+
+		// Sets the selection on a transform and returns it.
+		public GameObject GetSelection(Transform parent, SelectionType type) {
+			return _selectionManager.Get(parent, type);
+		}
+
+		// Return the selection as we dont need it.
+		public void ReturnSelection(GameObject selection) {
+			_selectionManager.Return(selection);
+		}
+
+		// Hide all selectors.
+		public void HideSelectors() {
+			_selectionManager.HideSelectors();
+		}
+
+		#endregion
 
 		// Calculate selection bawx.
 		public static Rect CalculateSelectionBox(Bounds selectionBounds, Rect playingArea) {
@@ -55,7 +76,8 @@ namespace ZS.Engine.GUI {
 		    float selectBoxHeight = 2 * screenBounds.extents.y;
 		             
 		    return new Rect(selectBoxLeft, selectBoxTop, selectBoxWidth, selectBoxHeight);
-		}
+		}	
+
 	}
 
 }

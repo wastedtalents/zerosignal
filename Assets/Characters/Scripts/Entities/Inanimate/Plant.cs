@@ -3,23 +3,8 @@ using System.Collections;
 
 namespace ZS.Characters.Inanimate {
 
-	public class Plant : Entity {
+	public class Plant : DeadObject {
 
-		// protected override void Awake() {
-		//     base.Awake();
-		// }
-		 
-		// protected override void Start () {
-		//     base.Start();
-		// }
-		 
-		// protected override void Update () {
-		//     base.Update();
-		// }
-		 
-		// protected override void OnGUI() {
-		//     base.OnGUI();
-		// }
 	}
 
 }

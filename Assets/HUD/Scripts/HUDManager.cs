@@ -38,8 +38,15 @@ namespace ZS.HUD {
 
 		#endregion
 
+		#region Prefabs.
+
+		public GameObject selectionPrefab;
+
+		#endregion
+
 		private CursorState _activeCursorState;
 		private int _currentFrame = 0;
+		private bool _mouseOverHud;
 
 		// Use this for initialization
 		void Start () {
@@ -98,7 +105,10 @@ namespace ZS.HUD {
 
 		// Draw a mouse cursor.
 		private void DrawMouseCursor() {
-  			if(!PointInClientBounds(InputService.Instance.MousePosition)) {
+			_mouseOverHud = !PointInClientBounds(InputService.Instance.MousePosition) && 
+				_activeCursorState != CursorState.PanRight && _activeCursorState != CursorState.PanUp;
+
+  			if(_mouseOverHud) {
 	        	Screen.showCursor = true;
 	    	} else {
         		Screen.showCursor = false; // dont use the regular cursor, just draw our skin.

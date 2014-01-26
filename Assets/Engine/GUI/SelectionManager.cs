@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using ZS.Characters;
 
-namespace ZS.Engine.Factories {
+namespace ZS.Engine.GUI {
 	
-	// Factory of selectors.
-	public class SelectorFactory : Singleton<SelectorFactory>, IInitializable {
+	// Manages all kinds of seelctions.
+	public class SelectionManager : MonoBehaviour  {
 
 		private List<GameObject> _selectors;
-		public GameObject selectorPrefab;
+		public GameObject _selectorPrefab;
 			
-		public void Initialize() { 
+		public SelectionManager(GameObject prefab) {
+			_selectorPrefab = prefab;
 			_selectors = new List<GameObject>();
 		}
 
@@ -31,7 +32,7 @@ namespace ZS.Engine.Factories {
 
 		private GameObject InstantiateSelector() {
 			return (GameObject) Instantiate(
-					selectorPrefab, 
+					_selectorPrefab, 
 					Vector3.zero, 
 					Quaternion.identity); 
 		}

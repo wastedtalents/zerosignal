@@ -16,7 +16,7 @@ namespace ZS.Engine.Cam {
 
     	// Use this for initialization
     	void Start () {
-            CameraManager.Instance.Follow(Registry.Instance.player.transform);
+            CameraManager.Instance.Follow(Registry.Instance.avatar.transform);
     	}
     	
     	public IEnumerator Shake() {
@@ -45,7 +45,7 @@ namespace ZS.Engine.Cam {
             Camera.main.transform.position = originalCamPos;
         }
 
-    	// Update is called once per frame
+    	// Update is called once per frame.
     	void Update () {
             CameraManager.Instance.UpdatePosition();
     	}

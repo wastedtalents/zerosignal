@@ -2,32 +2,36 @@
 using System.Collections;
 using ZS.Engine;
 using ZS.Engine.GUI;
-using ZS.Engine.Factories;
 using ZS.Engine.Utilities;
 
 namespace ZS.Characters {
 
-	// Type of selection to be used.
-	public enum SelectionType {
-		NotSelected = 0,
-		Command,
-		Target
-	}
-
 	// Base entity.
+	//<description>Describes a basic entity that is ANIMATE.</description>
 	public abstract class Entity : MonoBehaviour {
+
 		public string displayName; // display name.
 		public EntityParams parameters;	
+		public Player _owner; // Actual owner of this object if any.
 		
 		protected string[] _actions = {};
 		protected SelectionType _currentSelection;
-		protected GameObject _selection;
+		protected GameObject _selection;		
+
+		public Player Owner { 
+			get { return _owner; }
+		}
 
 		public Entity(string name) { 
 			displayName = name;
 		}
 
 		public Entity() {
+		}
+
+		// While this object was selected, someone hovered over "go".
+		public void SetHoverState(GameObject go) {
+
 		}
 
 		// Set this object as selected.
@@ -40,11 +44,11 @@ namespace ZS.Characters {
 		}
 
 		protected void ShowSelection() {
-			_selection = SelectorFactory.Instance.Get(gameObject.transform, _currentSelection);
+			_selection = GUIService.Instance.GetSelection(gameObject.transform, _currentSelection);
 		} 
 
 		protected void HideSelection() {
-			SelectorFactory.Instance.Return(_selection);
+			GUIService.Instance.ReturnSelection(_selection);
 			_selection = null;
 		} 
 

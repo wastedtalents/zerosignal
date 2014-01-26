@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ZS.Engine.Utilities;
+using ZS.Engine;
 
 public class EnemyController : MonoBehaviour {
 
@@ -100,8 +102,7 @@ Quaternion _rotation;
 		float moveY = Input.GetAxis("Vertical") * dTime;
 
 		rigidBody2D.velocity = new Vector2(moveX * flSpeed, moveY * flSpeed);
-		  var obj = GameObject.FindGameObjectsWithTag ("Player")[0];
-		  _rotation = LookHelper.SmoothLookAt(transform, obj.transform, 0.1f, 90);
+		  _rotation = LookHelper.SmoothLookAt(transform, Registry.Instance.avatar.transform, 0.1f, 90);
 
 		animator.SetBool("isRunning", moveX != 0 || moveY != 0);
 		animator.SetFloat("speed" , Mathf.Abs(Mathf.Max(moveX, moveY)));

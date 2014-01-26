@@ -29,7 +29,7 @@ namespace ZS.Engine {
 		public Camera mainCamera;
 		
 		[HideInInspector]
-		public GameObject player;
+		public GameObject avatar;
 		
 		[HideInInspector]
 		public GameObject hud;
@@ -43,9 +43,14 @@ namespace ZS.Engine {
 		[HideInInspector]
 		public Bounds invalidBounds;
 
+		// Current player script.
+		[HideInInspector]
+		public Player player;
+
 		public void Initialize() {
 			mainCamera = Camera.main;
-			player = GameObject.FindGameObjectsWithTag("Player")[0];
+			player = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent< Player >();
+			avatar = GameObject.FindGameObjectsWithTag("Avatar")[0];
 			hud = GameObject.FindGameObjectsWithTag("HUD")[0];
 			hudManager = hud.GetComponent<HUDManager>();
 			invalidHitPoint = Vector3.forward;

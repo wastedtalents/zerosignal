@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using ZS.Engine.Peripherials;
 using ZS.Engine.Utilities;
+using ZS.HUD;
 
 namespace ZS.Engine.Cam { 
 
@@ -30,6 +31,7 @@ namespace ZS.Engine.Cam {
 		private Vector3 _tempVector, _tempVector2;
 		private Vector2 _tempVector2d;
 		private float _scrollX, _scrollY;
+		private bool _mouseScroll;
 
 		#endregion
 
@@ -69,16 +71,25 @@ namespace ZS.Engine.Cam {
 			Vector3 movement = new Vector3(0,0,-10);
 
 			//horizontal camera movement
+			_mouseScroll = false;
 			if(xpos >= 0 && xpos < Registry.Instance.cameraScrollOffset) {
 			    movement.x -= Registry.Instance.cameraScrollSpeed;
+			    Registry.Instance.hudManager.SetCursorState(CursorState.PanLeft);
+				_mouseScroll = true;
 			} else if(xpos <= Screen.width && xpos > Screen.width - Registry.Instance.cameraScrollOffset) {
 			    movement.x += Registry.Instance.cameraScrollSpeed;
+			    Registry.Instance.hudManager.SetCursorState(CursorState.PanRight);
+				_mouseScroll = true;
 			}
 			//vertical camera movement
 			if(ypos >= 0 && ypos < Registry.Instance.cameraScrollOffset) {
 			    movement.y -= Registry.Instance.cameraScrollSpeed;
+			    Registry.Instance.hudManager.SetCursorState(CursorState.PanDown);
+				_mouseScroll = true;
 			} else if(ypos <= Screen.height && ypos > Screen.height - Registry.Instance.cameraScrollOffset) {
 			    movement.y += Registry.Instance.cameraScrollSpeed;
+			    Registry.Instance.hudManager.SetCursorState(CursorState.PanUp);
+				_mouseScroll = true;
 			}
 
 			movement = _cameraTransform.TransformDirection(movement);
@@ -94,6 +105,10 @@ namespace ZS.Engine.Cam {
 			if(destination != origin) {
   				_cameraTransform.position = Vector3.MoveTowards(origin, destination, 
   					Time.deltaTime * Registry.Instance.cameraScrollSpeed);
+			}
+
+			if(!_mouseScroll) {
+ 			   Registry.Instance.hudManager.SetCursorState(CursorState.Select);
 			}
 		}
 
@@ -144,7 +159,7 @@ namespace ZS.Engine.Cam {
 			// NOTE: this will work only on Z = 0;
 			_tempVector = InputService.Instance.MousePosition;
 			_tempVector.z = -_cameraTransform.position.z;
-			_tempVector = Camera.main.ScreenToWorldPoint(_tempVector);
+			_tempVector = _mainCamera.ScreenToWorldPoint(_tempVector);
        		_tempVector2d = new Vector2(_tempVector.x, _tempVector.y);
 
        		// Get collider.
