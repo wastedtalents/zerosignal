@@ -14,7 +14,8 @@ namespace ZS.Characters {
 		public string displayName; // display name.
 		public EntityParams parameters;	
 		public Player _owner; // Actual owner of this object if any.
-
+		
+		protected Vector3 _tempVector;
 		protected string[] _actions = {};
 		protected SelectionType _currentSelection;
 		protected GameObject _selection;		
@@ -23,11 +24,12 @@ namespace ZS.Characters {
 			get { return _owner; }
 		}
 
-		public Entity(string name) { 
+		public Entity(string name) : this() { 
 			displayName = name;
 		}
 
 		public Entity() {
+			_tempVector = new Vector3();
 		}
 
 		// While this object was selected, someone hovered over "go".
@@ -80,6 +82,10 @@ namespace ZS.Characters {
 	        		entity.PerformAction(hitObject, entity, Registry.ACTION_ATTACK);
 	        	}
 			 }
+		}
+
+		// Update.
+		protected virtual void Update () { 
 		}
 	}
 

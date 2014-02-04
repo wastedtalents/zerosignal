@@ -44,12 +44,7 @@ namespace ZS.Engine.GUI {
 		    float ey = selectionBounds.extents.y;
 		    float ez = selectionBounds.extents.z;
 		    
-		    Debug.Log(ex + " : " + ey + " " + ez);
 
-			// float ex = 64;
-		 //    float ey = 64;
-		 //    float ez = selectionBounds.extents.z;
-		    
 
 		    //Determine the screen coordinates for the corners of the selection bounds
 		    List<Vector3> corners = new List<Vector3>();

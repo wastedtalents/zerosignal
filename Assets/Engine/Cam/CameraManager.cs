@@ -111,9 +111,6 @@ namespace ZS.Engine.Cam {
   					Time.deltaTime * Registry.Instance.cameraScrollSpeed);
 			}
 
-			if(!_mouseScroll) {
- 			   Registry.Instance.hudManager.SetCursorState(CursorState.Select);
-			}
 		}
 
 		private void ParseZoom() {
@@ -169,7 +166,7 @@ namespace ZS.Engine.Cam {
        		// Get collider.
        	    _tempInt = Physics2D.OverlapPointNonAlloc(_tempVector2d, _findColliders);
 			if(_tempInt > 0) {
-				Debug.Log("HIT " + _findColliders[0].gameObject);
+			//	Debug.Log("HIT " + _findColliders[1].gameObject);
  				actualHit = _tempVector2d;
  				return _findColliders[0].gameObject;
  			}

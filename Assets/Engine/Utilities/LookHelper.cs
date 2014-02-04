@@ -57,20 +57,37 @@ namespace ZS.Engine.Utilities {
 		 }
 
 		 // Look into the direction of target.
-		 public static Quaternion LookAt(Transform source, Transform target, float offset = 0) {
-		 	var quaternion = CalcRotation(source.position, target.position);
+		 public static Quaternion LookAt(Transform source, Vector3 target, float offset = 0) {
+		 	var quaternion = CalcRotation(source.position, target);
 		 	source.rotation = quaternion;
 			if(offset != 0)
-	 	  		source.eulerAngles = new Vector3(0,0,quaternion.eulerAngles.z - 90);
+	 	  		source.eulerAngles = new Vector3(0,0,quaternion.eulerAngles.z + offset);
 	 	   	return quaternion;	
 		 }
 
+		// Look into the direction of target.
+		public static Quaternion LookAt(Transform source, Transform target, float offset = 0) {
+			return LookAt(source, target.position, offset);
+		}		 
+
 		 // Look smoothly into the direction of target.
 		 public static Quaternion SmoothLookAt(Transform source, Transform target, float speed, float offset = 0) {
-		 	var quaternion = CalcRotation(source.position, target.position);
+		 	return SmoothLookAt(source, target.position, speed, offset);
+		 }
+
+		 // Look at.
+		 public static Quaternion SmoothLookAt(Transform source, Vector3 target, float speed, float offset = 0) {
+		 	var quaternion = CalcRotation(source.position, target);
 		 	var q = Quaternion.Euler(0,0, quaternion.eulerAngles.z + offset);
 			source.rotation = Quaternion.Slerp(source.rotation, q, speed);
 			return quaternion;	
+		 }
+
+		 // Look at a target UNTIL. If it reaches theta angle difference, we will return false.
+		 public static bool SmoothLookAtUntil(Transform source, Vector3 target, float speed, float offset, float theta) {
+		 	var quat = SmoothLookAt(source, target, speed, offset);
+		 	_angle = Mathf.Abs(quat.eulerAngles.z - source.rotation.eulerAngles.z + offset);
+		 	return _angle > theta && _angle < (360 - theta);
 		 }
 	}
 
