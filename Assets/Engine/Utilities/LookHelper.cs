@@ -85,9 +85,11 @@ namespace ZS.Engine.Utilities {
 
 		 // Look at a target UNTIL. If it reaches theta angle difference, we will return false.
 		 public static bool SmoothLookAtUntil(Transform source, Vector3 target, float speed, float offset, float theta) {
+		 	// Calculate target rotation quaternion.
 		 	var quat = SmoothLookAt(source, target, speed, offset);
-		 	_angle = Mathf.Abs(quat.eulerAngles.z - source.rotation.eulerAngles.z + offset);
-		 	return _angle > theta && _angle < (360 - theta);
+		 	// Angle between target rotation and current rotation.
+		 	_angle = Mathf.Abs(quat.eulerAngles.z - source.rotation.eulerAngles.z + offset) % 360;
+		 	return _angle > theta && _angle < (360 - theta);		 	
 		 }
 	}
 
