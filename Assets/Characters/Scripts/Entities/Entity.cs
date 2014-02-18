@@ -8,16 +8,21 @@ using ZS.Engine.Utilities;
 namespace ZS.Characters {
 
 	// Base entity.
-	//<description>Describes a basic entity that is ANIMATE.</description>
+	// 
 	public abstract class Entity : MonoBehaviour {
 
+		#region Entity settings.
+
 		public string displayName; // display name.
-		public EntityParams parameters;	
-		public Player _owner; // Actual owner of this object if any.
+		public int hitPoints, maxHitPoints;
 		
-		protected Vector3 _tempVector;
+		#endregion
+
+		public Player _owner; // Actual owner of this object if any.
 		protected string[] _actions = {};
 		protected SelectionType _currentSelection;
+		
+		protected Vector3 _tempVector;
 		protected GameObject _selection;		
 
 		public Player Owner { 
