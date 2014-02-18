@@ -8,10 +8,14 @@ namespace ZS.Characters {
 
 	// Basic unit / person that player can acquire.
 	// That can be an animal or a person.
-	public class Unit : Entity {
+	public class MovingUnit : Entity {
+
+    #region Params.
 
 		// Move / rotate params.
 		public float moveSpeed, rotateSpeed;
+
+    #endregion
 
 		protected bool _moving, _rotating;
 		private Vector3 _destination, _targetPosition;

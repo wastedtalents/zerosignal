@@ -41,8 +41,6 @@ namespace Characters {
 			ParseMouseActivity();
 		}
 
-
-
 		// Handle input activity.
 		private void ParseInput() {
 			if(GameService.Instance.IsTactical && !InputService.Instance.IsOpsModeKey)

@@ -20,7 +20,8 @@ namespace ZS.Engine {
 		// ACTIONS.
 		public const string ACTION_ATTACK = "A_Attack";
 
-		public Transform mainCameraTransform;
+        public float cameraShakeMagnitude = 2.0f;
+        public float cameraShakeDuration = 0.05f;
 		public float cameraTrackingSpeed;
 		public float cameraDrag = 40f;
 		public float cameraZoom = 20f;
@@ -46,6 +47,9 @@ namespace ZS.Engine {
 		public int playerStartFood = 10;
 
 		[HideInInspector]
+		public Transform mainCameraTransform;
+
+		[HideInInspector]
 		public Camera mainCamera;
 		
 		[HideInInspector]
@@ -69,6 +73,7 @@ namespace ZS.Engine {
 
 		public void Initialize() {
 			mainCamera = Camera.main;
+			mainCameraTransform = mainCamera.transform;
 			player = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent< Player >();
 			avatar = GameObject.FindGameObjectsWithTag("Avatar")[0];
 			hud = GameObject.FindGameObjectsWithTag("HUD")[0];

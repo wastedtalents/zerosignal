@@ -20,17 +20,13 @@ namespace ZS.Engine.Cam {
 
 		#region Members.
 
-		private float _trackingSpeed;
-		private Camera _mainCamera;
 		private Transform _cameraTransform;
 		private Transform _target;
 		private Dictionary<CameraMode, Action> _methods;
-		private float _cameraDrag;
 		private float _temp , _temp2;
 		private float _dTime;
 		private Vector3 _tempVector, _tempVector2;
 		private Vector2 _tempVector2d;
-		private float _scrollX, _scrollY;
 		private bool _mouseScroll;
 
 		private int _tempInt;
@@ -45,10 +41,7 @@ namespace ZS.Engine.Cam {
 		#endregion
 
 		public void Initialize() {
-			_mainCamera = Registry.Instance.mainCamera;
-			_cameraDrag = Registry.Instance.cameraDrag;
 			_cameraTransform = Registry.Instance.mainCameraTransform;
-			_trackingSpeed = Registry.Instance.cameraTrackingSpeed;
 			_tempVector2 = _cameraTransform.position = _cameraTransform.position;
 			_findColliders = new Collider2D[4]; // Magic max colliders.
 
@@ -59,13 +52,15 @@ namespace ZS.Engine.Cam {
 		}
 
 		private void DoFollow() {
+			_cameraTransform = Registry.Instance.mainCameraTransform;
+
         	_temp = Mathf.Lerp (_cameraTransform.position.x, _target.position.x, _dTime);
         	_temp2 = Mathf.Lerp (_cameraTransform.position.y, _target.position.y, _dTime);
         	_cameraTransform.position = new Vector3(_temp, _temp2, _cameraTransform.position.z);	
 		}
 
 		private void DoFix() {
-			_cameraTransform.position = _target.position;
+			Registry.Instance.mainCameraTransform.position = _target.position;
 		} 
 
 		private void DoDetached() {
@@ -96,24 +91,26 @@ namespace ZS.Engine.Cam {
 				_mouseScroll = true;
 			}
 
-			movement = _cameraTransform.TransformDirection(movement);
+			movement = Registry.Instance.mainCameraTransform.TransformDirection(movement);
 			movement.z = 0;
 
 			//calculate desired camera position based on received input
-			Vector3 origin = _cameraTransform.position;
+			Vector3 origin = Registry.Instance.mainCameraTransform.position;
 			Vector3 destination = origin;
 			destination.x += movement.x;
 			destination.y += movement.y;
 			destination.z += movement.z;
 
 			if(destination != origin) {
-  				_cameraTransform.position = Vector3.MoveTowards(origin, destination, 
+  				Registry.Instance.mainCameraTransform.position = Vector3.MoveTowards(origin, destination, 
   					Time.deltaTime * Registry.Instance.cameraScrollSpeed);
 			}
 
 		}
 
 		private void ParseZoom() {
+			_cameraTransform = Registry.Instance.mainCameraTransform;
+			
 			_temp = InputService.Instance.GetZoom() * Registry.Instance.cameraZoom * Time.deltaTime;
 			var tempV = _tempVector;
         	if (_temp != 0) {
@@ -148,7 +145,7 @@ namespace ZS.Engine.Cam {
 
 		public void UpdatePosition() {
 			ParseZoom();
- 			_dTime = Time.deltaTime * _trackingSpeed;
+ 			_dTime = Time.deltaTime * Registry.Instance.cameraTrackingSpeed;
 			_methods[_currentMode]();
 		}
 
@@ -159,26 +156,17 @@ namespace ZS.Engine.Cam {
 		public GameObject FindHitObject(Vector3 hitPoint, out Vector3 actualHit) {
 			// NOTE: this will work only on Z = 0;
 			_tempVector = InputService.Instance.MousePosition;
-			_tempVector.z = -_cameraTransform.position.z;
-			_tempVector = _mainCamera.ScreenToWorldPoint(_tempVector);
+			_tempVector.z = -Registry.Instance.mainCameraTransform.position.z;
+			_tempVector = Registry.Instance.mainCamera.ScreenToWorldPoint(_tempVector);
        		_tempVector2d = new Vector2(_tempVector.x, _tempVector.y);
 
        		// Get collider.
        	    _tempInt = Physics2D.OverlapPointNonAlloc(_tempVector2d, _findColliders);
 			if(_tempInt > 0) {
-			//	Debug.Log("HIT " + _findColliders[1].gameObject);
  				actualHit = _tempVector2d;
  				return _findColliders[0].gameObject;
  			}
  			actualHit = Registry.Instance.invalidHitPoint;
-
-
-   //     		Collider2D coll = Physics2D.OverlapPoint(_tempVector2d);
-			// if(coll != null) {
- 		// 		actualHit = _tempVector2d;
- 		// 		return coll.gameObject;
- 		// 	}
- 		// 	actualHit = Registry.Instance.invalidHitPoint;
 			return null;
 		}
 

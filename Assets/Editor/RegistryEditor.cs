@@ -44,9 +44,11 @@ namespace ZS.Engine {
 			_showCameraTab = EditorGUILayout.Foldout(_showCameraTab, CAMERA_TAB);
 			if(_showCameraTab) {
 				if(Selection.activeTransform) {
-					_target.mainCameraTransform = (Transform)EditorGUILayout.ObjectField("Camera transform : ",
-						_target.mainCameraTransform, 
-						typeof(Transform), true);
+					// _target.mainCameraTransform = (Transform)EditorGUILayout.ObjectField("Camera transform : ",
+					// 	_target.mainCameraTransform, 
+					// 	typeof(Transform), true);
+					_target.cameraShakeMagnitude = EditorGUILayout.FloatField("Shake magnitude : " , _target.cameraShakeMagnitude);
+					_target.cameraShakeDuration = EditorGUILayout.FloatField("Shake duration : " , _target.cameraShakeDuration);
 					_target.cameraTrackingSpeed = EditorGUILayout.FloatField("Track speed : " , _target.cameraTrackingSpeed);
 					_target.cameraDrag = EditorGUILayout.FloatField("Camera Drag : " , _target.cameraDrag);
 					_target.cameraZoom = EditorGUILayout.FloatField("Camera Zoom : " , _target.cameraZoom);

@@ -7,23 +7,20 @@ namespace ZS.Engine.Cam {
 
     public class CameraController : MonoBehaviour {
 
-    	public Camera mainCamera;
-    	public float delta = 0.1f;
-        public Transform target;
-        public float trackingSpeed = 2.0f;
-        private float shakeDuration = 0.05f;
-        public float magnitude = 2.0f;
+        private Camera _mainCamera;
 
     	// Use this for initialization
     	void Start () {
+            _mainCamera = Registry.Instance.mainCamera;
             CameraManager.Instance.Follow(Registry.Instance.avatar.transform);
     	}
     	
     	public IEnumerator Shake() {
-            
             float elapsed = 0.0f;
+            var magnitude = Registry.Instance.cameraShakeMagnitude;
+            var shakeDuration = Registry.Instance.cameraShakeDuration;
         
-            Vector3 originalCamPos = mainCamera.transform.position;
+            Vector3 originalCamPos = _mainCamera.transform.position;
             while (elapsed < shakeDuration) {
             
                 elapsed += Time.deltaTime;          
@@ -37,12 +34,12 @@ namespace ZS.Engine.Cam {
                 x *= magnitude * damper;
                 y *= magnitude * damper;
                 
-                var cPos = mainCamera.transform.position;
-                mainCamera.transform.position = new Vector3(cPos.x + x, cPos.y + y, originalCamPos.z);
+                var cPos = _mainCamera.transform.position;
+                _mainCamera.transform.position = new Vector3(cPos.x + x, cPos.y + y, originalCamPos.z);
                     
                 yield return null;
             }
-            Camera.main.transform.position = originalCamPos;
+            _mainCamera.transform.position = originalCamPos;
         }
 
     	// Update is called once per frame.

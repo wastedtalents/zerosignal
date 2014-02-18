@@ -83,8 +83,9 @@ namespace ZS.Engine {
 		// Is this item selectable by current player.
 		public bool IsObjectSelectable(Entity entity) {			
 			// Check if it is in fact a player.
-			if(entity.Owner != null && entity.Owner.username == Registry.Instance.player.username) { // 
-				return entity is Unit || entity is Building || entity is Enemy;
+			if(entity.Owner != null && entity.Owner.username == Registry.Instance.player.username) { 
+				//TODO: ENEMY. 
+				return entity is MovingUnit || entity is Building;
             }
             return false;
 		}
