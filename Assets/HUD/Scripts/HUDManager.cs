@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
+using System.Collections.Generic;
 using ZS.Engine;
 using ZS.Engine.Peripherials;
+using System.Collections.ObjectModel;
 
 namespace ZS.HUD {
 
@@ -21,6 +23,7 @@ namespace ZS.HUD {
 
 		#region Textures.
 
+		public Texture2D[] resources;
 		public Texture2D activeCursor;
 		public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor;
 		public Texture2D[] moveCursors, attackCursors, harvestCursors;
@@ -29,6 +32,9 @@ namespace ZS.HUD {
 
 		#region GUISkins.
 
+		private Dictionary< PlayerResourceType, int > _resourceValues, _resourceLimits;
+		private Dictionary< PlayerResourceType, Texture2D > _resourceImages;
+		
 		public GUISkin resourceSkin, ordersSkin, selectBoxSkin, mouseCursorSkin;
 		public bool _insideWidth, _insideHeight;
 
@@ -50,6 +56,13 @@ namespace ZS.HUD {
 
 		// Use this for initialization
 		void Start () {
+			if(_resourceValues == null)
+				_resourceValues = new Dictionary< PlayerResourceType, int >();
+			if(_resourceLimits == null)
+				_resourceLimits = new Dictionary< PlayerResourceType, int >();
+			_resourceImages = new Dictionary< PlayerResourceType, Texture2D > ();
+
+			InitResources();
 			SetArcadeMode();
 		}
 		
@@ -63,9 +76,27 @@ namespace ZS.HUD {
 		// Draws the resources bar.
 		private void DrawResources() {
 			GUI.skin = resourceSkin;
-   			 GUI.BeginGroup(new Rect(0,0,Screen.width , gui_resourcesBarHeight));
-  	 		 GUI.Box(new Rect(0,0,Screen.width,gui_resourcesBarHeight),"");
-   			 GUI.EndGroup();
+   			GUI.BeginGroup(new Rect(0,0,Screen.width , gui_resourcesBarHeight));
+  	 		GUI.Box(new Rect(0,0,Screen.width,gui_resourcesBarHeight),"");
+  	 		int topPos = 4, iconLeft = 4, textLeft = 40;
+			DrawResourceIcon(PlayerResourceType.Food, iconLeft, textLeft, topPos);
+			iconLeft += Registry.TEXT_WIDTH;
+			textLeft += Registry.TEXT_WIDTH;
+			DrawResourceIcon(PlayerResourceType.Organic, iconLeft, textLeft, topPos);
+			iconLeft += Registry.TEXT_WIDTH;
+			textLeft += Registry.TEXT_WIDTH;
+			DrawResourceIcon(PlayerResourceType.Synthetic, iconLeft, textLeft, topPos);
+   			GUI.EndGroup();
+		}
+
+		private void DrawResourceIcon(PlayerResourceType type, int iconLeft, int textLeft, int topPos) {
+			if(!_resourceImages.ContainsKey(type))
+				return;
+ 		   	var icon = _resourceImages[type];
+    		var text = String.Format("{0}/{1}", _resourceValues[type].ToString(),
+    			_resourceLimits[type].ToString());
+    		GUI.DrawTexture(new Rect(iconLeft, topPos, Registry.ICON_WIDTH, Registry.ICON_HEIGHT), icon);
+    		GUI.Label (new Rect(textLeft, topPos, Registry.TEXT_WIDTH, Registry.TEXT_HEIGHT), text);
 		}
 
 		// Draws the orders bar.
@@ -89,12 +120,39 @@ namespace ZS.HUD {
 	   		GUI.EndGroup();
 		}
 
+		// Initialize resources like icons.
+		private void InitResources() {
+			Debug.Log("ss " + resources.Length);
+			for(int i = 0; i < resources.Length; i++) {
+    			switch(resources[i].name) {
+        			case Registry.FOOD_ICON_NAME:
+            			_resourceImages.Add(PlayerResourceType.Food, resources[i]);
+            			break;
+        			case Registry.ORGANIC_ICON_NAME:
+            			_resourceImages.Add(PlayerResourceType.Organic, resources[i]);
+            			break;
+            		case Registry.SYNTHETIC_ICON_NAME:
+            			_resourceImages.Add(PlayerResourceType.Synthetic, resources[i]);
+            			break;
+        			default: 
+        				break;
+    			}
+			}
+		}
+
 		public bool PointInClientBounds(Vector3 point) {
 			 //Screen coordinates start in the lower-left corner of the screen
    			 //not the top-right of the screen like the drawing coordinates do
    			 _insideWidth = point.x >= 0 && point.x <= Screen.width - gui_ordersBarWidth;      
    			 _insideHeight = point.y >= 0 && point.y <= Screen.height - 	gui_resourcesBarHeight;
   			 return _insideWidth && _insideHeight;
+		}
+
+		// Draws resources.
+		public void SetResourceCollections(Dictionary< PlayerResourceType, int > resourceValues, 
+			Dictionary< PlayerResourceType, int > resourceLimits) {
+    		_resourceValues = resourceValues;
+    		_resourceLimits = resourceLimits;
 		}
 
 		// Gets the actual PLAYING area.

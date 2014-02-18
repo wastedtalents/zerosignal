@@ -51,11 +51,9 @@ namespace ZS.Characters {
 		public void StartMoving(Vector3 destination) {
  		   	_destination = destination;
 
- 		   	// REM
 			var targetPosition = _destination - transform.position;
 			_targetRotation = Quaternion.LookRotation(targetPosition);
 
-    	//	_targetRotation = Quaternion.LookRotation (_destination - transform.position);
     		_targetPosition = _destination - transform.position;
     		_rotating = true;
     		_moving = false;

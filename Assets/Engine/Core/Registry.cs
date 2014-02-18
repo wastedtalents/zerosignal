@@ -12,6 +12,11 @@ namespace ZS.Engine {
 		public float CEILING_LAYER_Z ;
 		public int CEILING_LAYER_MASK_ID; // used for raycasting mapping as a layermask.
 
+		// Resources.
+		public const string FOOD_ICON_NAME = "food";
+		public const string ORGANIC_ICON_NAME = "organic";
+		public const string SYNTHETIC_ICON_NAME = "synthetic";
+
 		// ACTIONS.
 		public const string ACTION_ATTACK = "A_Attack";
 
@@ -24,6 +29,21 @@ namespace ZS.Engine {
 		public float cameraZoomMax = -2;
 		public float cameraScrollOffset = 15f;
 		public float cameraScrollSpeed = 25f;
+
+		// icons.
+		public const int ICON_WIDTH = 32;
+		public const int ICON_HEIGHT = 32;
+		public const int TEXT_WIDTH = 128;
+		public const int TEXT_HEIGHT = 32;
+
+		// TODO: this has to be scripted!!
+		public readonly int maxOrganic = 100;
+		public readonly int maxSynthetic = 100;
+		public readonly int maxFood = 100;
+
+		public int playerStartOrganic = 10;
+		public int playerStartSynthetic = 0;
+		public int playerStartFood = 10;
 
 		[HideInInspector]
 		public Camera mainCamera;

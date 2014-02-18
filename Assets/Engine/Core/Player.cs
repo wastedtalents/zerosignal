@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace ZS.Engine { 
 
@@ -14,23 +14,51 @@ namespace ZS.Engine {
 	}
 
 	// Represents a current player.
-	public class Player : MonoBehaviour {
-
+	public class Player : PlayerSettingsBase {
+		
 		public string username;
 		public PlayerType playerType; // Is this a current player or a different 
 
 		public Player() {
 		}
-
-		// Use this for initialization
-		void Start () {
-			
-		}
-		
+	
 		// Update is called once per frame
 		void Update () {
-		
 		}
+
+		protected override void InitResources() {
+			_resources = InitResourceList();
+   			_resourceLimits = InitResourceList();
+		}
+
+		protected override void InitResourceLimits() {
+			AddStartResourceLimits();
+			AddStartResources();
+
+			if(playerType == PlayerType.Current) {
+    			Registry.Instance.hudManager.SetResourceCollections(_resources, _resourceLimits);
+			}
+		}
+
+		private Dictionary< PlayerResourceType, int > InitResourceList() {
+			return new Dictionary< PlayerResourceType, int >() {
+				{ PlayerResourceType.Organic, 0 },
+				{ PlayerResourceType.Synthetic, 0},
+				{ PlayerResourceType.Food, 0}
+			};
+		}
+
+		private void AddStartResourceLimits() {
+    		IncrementResourceLimit(PlayerResourceType.Organic, Registry.Instance.maxOrganic);
+    		IncrementResourceLimit(PlayerResourceType.Synthetic, Registry.Instance.maxSynthetic);
+    		IncrementResourceLimit(PlayerResourceType.Food, Registry.Instance.maxFood);
+		}
+ 
+		private void AddStartResources() {
+   			AddResource(PlayerResourceType.Organic, Registry.Instance.playerStartOrganic);
+   			AddResource(PlayerResourceType.Synthetic, Registry.Instance.playerStartSynthetic);
+   			AddResource(PlayerResourceType.Food, Registry.Instance.playerStartFood);
+		}		
 	}
 
 }
